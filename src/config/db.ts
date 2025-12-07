@@ -26,4 +26,16 @@ export const initDB = async () => {
       availability_status TEXT CHECK( availability_status IN('available', 'booked'))
       )
       `);
+
+  await pool.query(`
+        CREATE TABLE IF NOT EXISTS bookings(
+        id SERIAL PRIMARY KEY,
+        customer_id INT REFERENCES users(id) ON DELETE CASCADE,
+        vehicle_id INT REFERENCES vehicles(id) ON DELETE CASCADE,
+        rent_start_date DATE NOT NULL,
+        rent_end_date DATE NOT NULL CHECK(rent_end_date > rent_start_date),
+        total_price NUMERIC CHECK(total_price > 0),
+        status TEXT CHECK(status IN('active', 'cancelled', 'returned'))
+        )
+        `);
 };

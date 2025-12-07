@@ -1,6 +1,7 @@
 import express from "express";
 import { config } from "./config";
 import { initDB } from "./config/db";
+import { bookingsRoutes } from "./modules/bookings/bookings.routes";
 import { userRoutes } from "./modules/users/users.routes";
 import { vehicleRoutes } from "./modules/vehicles/vehicles.routes";
 
@@ -12,6 +13,8 @@ initDB();
 app.use("/api/v1", userRoutes.router);
 
 app.use("/api/v1", vehicleRoutes.router);
+
+app.use("/api/v1", bookingsRoutes.router);
 
 app.listen(config.port, () => {
   console.log("server is running on port ", config.port);
