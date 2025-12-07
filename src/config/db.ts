@@ -15,4 +15,15 @@ export const initDB = async () => {
     role TEXT NOT NULL CHECK(role IN('admin', 'customer'))
     )
     `);
+
+  await pool.query(`
+      CREATE TABLE IF NOT EXISTS vehicles(
+      id SERIAL PRIMARY KEY,
+      vehicle_name TEXT NOT NULL,
+      type TEXT CHECK(type IN('car','bike','van','SUV')),
+      registration_number TEXT UNIQUE,
+      daily_rent_price NUMERIC CHECK(daily_rent_price > 0),
+      availability_status TEXT CHECK( availability_status IN('available', 'booked'))
+      )
+      `);
 };
