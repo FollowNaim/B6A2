@@ -83,13 +83,29 @@ const upadteVehicle = async (req: Request) => {
 
 const deleteVehicle = async (id: string) => {
   try {
+    const vehicle = await pool.query(
+      `
+      SELECT * FROM vehicles WHERE id=$1
+      `,
+      [id]
+    );
+
+    if (vehicle.rows[0]?.availability_status === "booked") {
+      return {
+        success: false,
+        message: "vehicle is already booked and can't be deleted",
+      };
+    }
     const result = await pool.query(
       `
         DELETE FROM vehicles WHERE id=$1
         `,
       [id]
     );
-    return result;
+    if (!result.rowCount) {
+      return { success: false, message: "vehicle is not found" };
+    }
+    return { success: true, message: "Vehicle deleted successfully", result };
   } catch (err) {
     throw err;
   }

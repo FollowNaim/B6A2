@@ -70,17 +70,17 @@ const updateVehilce = async (req: Request, res: Response) => {
 
 const deleteVehicle = async (req: Request, res: Response) => {
   try {
-    const result = await vehicleServices.deleteVehicle(
+    const { success, message, result } = await vehicleServices.deleteVehicle(
       req.params.vehicleId as string
     );
-    if (!result.rowCount) {
-      res
-        .status(200)
-        .json({ success: false, message: "no vehicle found with this id" });
+
+    if (!success) {
+      res.status(200).json({ success, message });
     }
     res.status(200).json({
-      success: true,
-      message: "Vehicle deleted successfully",
+      success,
+      message,
+      result,
     });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });

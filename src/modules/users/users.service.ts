@@ -47,13 +47,25 @@ const updateUser = async (re: Request) => {
 
 const deleteUser = async (id: string) => {
   try {
-    const result = await pool.query(
+    const re = await pool.query(
+      `
+      SELECT * FROM bookings WHERE customer_id=$1
+      `,
+      [id]
+    );
+    if (re.rows.length) {
+      return {
+        success: false,
+        message: "user's booking is exists. can't be deleted the user!",
+      };
+    }
+    await pool.query(
       `
             DELETE FROM users WHERE id=$1 RETURNING *
             `,
       [id]
     );
-    return result;
+    return { success: true, message: "User deleted successfully" };
   } catch (err) {
     throw err;
   }
