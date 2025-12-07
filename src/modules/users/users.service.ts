@@ -1,17 +1,18 @@
+import bcrypt from "bcrypt";
 import { Request } from "express";
 import { pool } from "../../config/db";
 import { CreateUserPayload } from "../../types/users";
 
 const createUser = async (payload: CreateUserPayload) => {
   const { name, email, password, phone, role } = payload;
+  const encryptedPassword = await bcrypt.hash(password, 10);
   try {
     const result = await pool.query(
       `
     INSERT INTO users(name, email, password, phone, role) VALUES($1,$2,$3,$4,$5) RETURNING *
     `,
-      [name, email, password, phone, role]
+      [name, email, encryptedPassword, phone, role]
     );
-    console.log(result);
     return result;
   } catch (err) {
     throw err;

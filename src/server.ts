@@ -2,6 +2,7 @@ import express from "express";
 import nodeCron from "node-cron";
 import { config } from "./config";
 import { initDB, pool } from "./config/db";
+import { authRoutes } from "./modules/auth/auth.routes";
 import { bookingsRoutes } from "./modules/bookings/bookings.routes";
 import { userRoutes } from "./modules/users/users.routes";
 import { vehicleRoutes } from "./modules/vehicles/vehicles.routes";
@@ -16,6 +17,8 @@ app.use("/api/v1", userRoutes.router);
 app.use("/api/v1", vehicleRoutes.router);
 
 app.use("/api/v1", bookingsRoutes.router);
+
+app.use("/api/v1", authRoutes.router);
 
 nodeCron.schedule("0 0 * * *", async () => {
   console.log("running a task every day");
