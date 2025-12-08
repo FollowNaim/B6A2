@@ -26,7 +26,7 @@ const loginUser = async (req: Request) => {
         expiresIn: "1d",
       }
     );
-    return { decryptPassword, token };
+    return { decryptPassword, token, user };
   } catch (err) {
     throw err;
   }

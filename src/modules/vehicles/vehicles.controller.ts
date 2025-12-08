@@ -70,7 +70,7 @@ const updateVehilce = async (req: Request, res: Response) => {
 
 const deleteVehicle = async (req: Request, res: Response) => {
   try {
-    const { success, message, result } = await vehicleServices.deleteVehicle(
+    const { success, message } = await vehicleServices.deleteVehicle(
       req.params.vehicleId as string
     );
 
@@ -80,7 +80,6 @@ const deleteVehicle = async (req: Request, res: Response) => {
     res.status(200).json({
       success,
       message,
-      result,
     });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });

@@ -103,9 +103,9 @@ const deleteVehicle = async (id: string) => {
       [id]
     );
     if (!result.rowCount) {
-      return { success: false, message: "vehicle is not found" };
+      return { success: false, message: "No vehicles found" };
     }
-    return { success: true, message: "Vehicle deleted successfully", result };
+    return { success: true, message: "Vehicle deleted successfully" };
   } catch (err) {
     throw err;
   }

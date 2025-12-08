@@ -3,7 +3,7 @@ import { bookingServices } from "./booking.service";
 
 const getBookings = async (req: Request, res: Response) => {
   try {
-    const result = await bookingServices.getBookings(req);
+    const result = await bookingServices.getBookings(req, res);
     const data = Array.isArray(result) ? result : result.rows;
     res.status(200).json({
       success: true,
@@ -17,7 +17,7 @@ const getBookings = async (req: Request, res: Response) => {
 
 const createBooking = async (req: Request, res: Response) => {
   try {
-    const { result, vehicle } = await bookingServices.createBooking(req);
+    const { result, vehicle } = await bookingServices.createBooking(req, res);
     res.status(200).json({
       success: true,
       message: "Booking created successfully",

@@ -1,7 +1,7 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import { pool } from "../../config/db";
 
-const getBookings = async (req: Request) => {
+const getBookings = async (req: Request, res: Response) => {
   // ! TODO: will chagne layout if user is not admin
   const role = req.user?.role;
   const email = req.user?.email;
@@ -12,6 +12,9 @@ const getBookings = async (req: Request) => {
     `,
     [email]
   );
+  if (!user.rowCount) {
+    res.status(404).json({ success: false, message: "user is not found" });
+  }
   if (role === "customer") {
     console.log("role is cutomer");
     const personalBookings = await pool.query(
@@ -38,7 +41,7 @@ const getBookings = async (req: Request) => {
   }
 };
 
-const createBooking = async (req: Request) => {
+const createBooking = async (req: Request, res: Response) => {
   const { customer_id, vehicle_id, rent_start_date, rent_end_date } = req.body;
   const s = new Date(rent_start_date);
   const e = new Date(rent_end_date);
@@ -52,6 +55,9 @@ const createBooking = async (req: Request) => {
         `,
       [vehicle_id]
     );
+    if (!vehicle.rowCount) {
+      res.status(404).json({ success: false, message: "Vehicle is not found" });
+    }
     const totalPrice = vehicle.rows[0].daily_rent_price * totalDays;
     await pool.query(
       `
