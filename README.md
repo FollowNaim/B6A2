@@ -4,7 +4,7 @@ A backend API for managing a vehicle rental system with full support for vehicle
 
 **Live URL:** _[GearShift](https://gearshift-server.vercel.app/)_
 
-**Default Users**
+**Default Login Credentials**
 
 - Admin
 
