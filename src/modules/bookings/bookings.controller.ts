@@ -3,11 +3,12 @@ import { bookingServices } from "./booking.service";
 
 const getBookings = async (req: Request, res: Response) => {
   try {
-    const result = await bookingServices.getBookings();
+    const result = await bookingServices.getBookings(req);
+    const data = Array.isArray(result) ? result : result.rows;
     res.status(200).json({
       success: true,
       message: "Bookings retrieved successfully",
-      data: result.rows,
+      data,
     });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });

@@ -32,15 +32,31 @@ const getUsers = async () => {
 
 const updateUser = async (re: Request) => {
   const { name, email, phone, role } = re.body;
+  const tokenMail = re.user?.email;
+  const tokenRole = re.user?.role;
   const id = re.params.userId;
   try {
+    const user = await pool.query(
+      `
+      SELECT * FROM users WHERE id=$1
+      `,
+      [id]
+    );
+    const { email: userMail } = user.rows[0];
+    if (tokenRole !== "admin" && userMail !== tokenMail) {
+      return { success: false, message: "Forbidden access" };
+    }
     const result = await pool.query(
       `
             UPDATE users SET name=$1, email=$2, phone=$3, role=$4 WHERE id=$5 RETURNING *
             `,
       [name, email, phone, role, id]
     );
-    return result;
+    return {
+      success: true,
+      message: "User updated successfully",
+      data: result,
+    };
   } catch (err) {
     throw err;
   }

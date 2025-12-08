@@ -30,10 +30,20 @@ const getUsers = async (req: Request, res: Response) => {
 const updateUser = async (req: Request, res: Response) => {
   try {
     const result = await usersServices.updateUser(req);
+    const { success, message, data } = result;
+    if (!success) {
+      res.status(403).json({ success, message });
+    }
+    if (!data?.rowCount) {
+      res.status(200).json({
+        success: false,
+        message: "No user found matching this id",
+      });
+    }
     res.status(200).json({
-      success: true,
-      message: "User updated successfully",
-      data: result.rows[0],
+      success,
+      message,
+      data: data?.rows[0],
     });
   } catch (err: any) {
     res.status(500).json({ success: false, message: err.message });

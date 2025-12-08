@@ -1,7 +1,8 @@
 import bcrypt from "bcrypt";
 import { Request } from "express";
+import jwt from "jsonwebtoken";
+import { config } from "../../config";
 import { pool } from "../../config/db";
-import { Jwt } from "jsonwebtoken";
 
 const loginUser = async (req: Request) => {
   const { email, password } = req.body;
@@ -16,7 +17,16 @@ const loginUser = async (req: Request) => {
       password,
       user.rows[0].password
     );
-    return { decryptPassword, token: "1234" };
+    console.log(user.rows[0]);
+    const { name, email: dbEmail, role } = user.rows[0];
+    const token = jwt.sign(
+      { name, email: dbEmail, role },
+      config.jwt_secret as string,
+      {
+        expiresIn: "1d",
+      }
+    );
+    return { decryptPassword, token };
   } catch (err) {
     throw err;
   }

@@ -1,8 +1,31 @@
 import { Request } from "express";
 import { pool } from "../../config/db";
 
-const getBookings = async () => {
+const getBookings = async (req: Request) => {
   // ! TODO: will chagne layout if user is not admin
+  const role = req.user?.role;
+  const email = req.user?.email;
+  console.log(req.user);
+  const user = await pool.query(
+    `
+    SELECT * FROM users WHERE email=$1
+    `,
+    [email]
+  );
+  if (role === "customer") {
+    console.log("role is cutomer");
+    const personalBookings = await pool.query(
+      `
+      SELECT * FROM bookings WHERE customer_id=$1
+      `,
+      [user.rows[0].id]
+    );
+    const formatted = personalBookings.rows.map((b) => {
+      const { customer_id, ...rest } = b;
+      return rest;
+    });
+    return formatted;
+  }
   try {
     const result = await pool.query(
       `
