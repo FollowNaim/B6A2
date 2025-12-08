@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import nodeCron from "node-cron";
 import { config } from "./config";
 import { initDB, pool } from "./config/db";
@@ -11,6 +11,10 @@ const app = express();
 app.use(express.json());
 
 initDB();
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Congratulatoins, YAYY!!! <br> Server is up and running!");
+});
 
 app.use("/api/v1", userRoutes.router);
 
