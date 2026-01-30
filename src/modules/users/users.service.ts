@@ -9,9 +9,9 @@ const createUser = async (payload: CreateUserPayload) => {
   try {
     const result = await pool.query(
       `
-    INSERT INTO users(name, email, password, phone, role) VALUES($1,$2,$3,$4,$5) RETURNING *
+    INSERT INTO users(name, email, password, phone, role) VALUES($1,$2,$3,$4,$5) RETURNING id, name, email, phone, role
     `,
-      [name, email, encryptedPassword, phone, role]
+      [name, email, encryptedPassword, phone, role],
     );
     return result;
   } catch (err) {
@@ -22,7 +22,7 @@ const createUser = async (payload: CreateUserPayload) => {
 const getUsers = async () => {
   try {
     const result = await pool.query(`
-            SELECT * FROM users
+            SELECT id, name, email, phone, role FROM users
             `);
     return result;
   } catch (err) {
@@ -40,7 +40,7 @@ const updateUser = async (re: Request) => {
       `
       SELECT * FROM users WHERE id=$1
       `,
-      [id]
+      [id],
     );
     const { email: userMail } = user.rows[0];
     if (tokenRole !== "admin" && userMail !== tokenMail) {
@@ -48,9 +48,9 @@ const updateUser = async (re: Request) => {
     }
     const result = await pool.query(
       `
-            UPDATE users SET name=$1, email=$2, phone=$3, role=$4 WHERE id=$5 RETURNING *
+            UPDATE users SET name=$1, email=$2, phone=$3, role=$4 WHERE id=$5 RETURNING id, name, email, phone, role
             `,
-      [name, email, phone, role, id]
+      [name, email, phone, role, id],
     );
     return {
       success: true,
@@ -68,7 +68,7 @@ const deleteUser = async (id: string) => {
       `
       SELECT * FROM bookings WHERE customer_id=$1
       `,
-      [id]
+      [id],
     );
     if (re.rows.length) {
       return {
@@ -80,7 +80,7 @@ const deleteUser = async (id: string) => {
       `
             DELETE FROM users WHERE id=$1 RETURNING *
             `,
-      [id]
+      [id],
     );
     return { success: true, message: "User deleted successfully" };
   } catch (err) {

@@ -18,7 +18,7 @@ const getBookings = async (req: Request, res: Response) => {
 const createBooking = async (req: Request, res: Response) => {
   try {
     const { result, vehicle } = await bookingServices.createBooking(req, res);
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: "Booking created successfully",
       data: {
@@ -38,7 +38,7 @@ const updateBooking = async (req: Request, res: Response) => {
   try {
     const result = await bookingServices.updateBooking(
       req.body.status,
-      req.params.bookingId as string
+      req.params.bookingId as string,
     );
     if (req.body.status === "returned") {
       res.status(200).json({

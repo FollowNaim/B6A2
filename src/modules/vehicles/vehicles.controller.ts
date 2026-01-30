@@ -45,7 +45,7 @@ const getSingleVehicle = async (req: Request, res: Response) => {
 const createVehicle = async (req: Request, res: Response) => {
   try {
     const result = await vehicleServices.createVehicle(req);
-    res.status(200).json({
+    res.status(201).json({
       success: true,
       message: "Vehicle created successfully",
       data: result.rows[0],
@@ -71,7 +71,7 @@ const updateVehilce = async (req: Request, res: Response) => {
 const deleteVehicle = async (req: Request, res: Response) => {
   try {
     const { success, message } = await vehicleServices.deleteVehicle(
-      req.params.vehicleId as string
+      req.params.vehicleId as string,
     );
 
     if (!success) {

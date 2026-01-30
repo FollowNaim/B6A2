@@ -7,19 +7,19 @@ const router = Router();
 router.get(
   "/bookings",
   auth("admin", "customer"),
-  bookingControllers.getBookings
+  bookingControllers.getBookings,
 );
 
 router.post(
   "/bookings",
   auth("admin", "customer"),
-  bookingControllers.createBooking
+  bookingControllers.createBooking,
 );
 
 router.put(
   "/bookings/:bookingId",
   auth("admin", "customer"),
-  bookingControllers.updateBooking
+  bookingControllers.updateBooking,
 );
 
 export const bookingsRoutes = { router };

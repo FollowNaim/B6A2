@@ -13,13 +13,13 @@ router.get("/vehicles/:vehicleId", vehicleController.getSingleVehicle);
 router.put(
   "/vehicles/:vehicleId",
   auth("admin"),
-  vehicleController.updateVehilce
+  vehicleController.updateVehilce,
 );
 
 router.delete(
   "/vehicles/:vehicleId",
   auth("admin"),
-  vehicleController.deleteVehicle
+  vehicleController.deleteVehicle,
 );
 
 export const vehicleRoutes = { router };
